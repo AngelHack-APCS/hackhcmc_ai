@@ -1,6 +1,7 @@
 from src.prompts import SUGGESTION_PROMPT_TEMPLATE, BASIC_INFO_TEMPLATE, RECENT_TASKS_TEMPLATE
 from src.schema import ModelSuggestion
 from src.model import load_model
+import asyncio
 
 def get_children_info():
     # TODO: Fetch from the backend database
@@ -14,17 +15,16 @@ import re
 import json
 
 def extract_json_from_string(text):
-    # Regex pattern to match content between ```json and ```
-    pattern = r'```json\s*(.*?)\s*```'
+    # Regex pattern to match content between ```json and ``` or ```
+    pattern = r'```(?:json\s*)?(.*?)```'
     match = re.search(pattern, text, re.DOTALL)
     
     if match:
-        json_content = match.group(1)
+        json_content = match.group(1).strip()
         try:
             data = json.loads(json_content)
             return data
         except json.JSONDecodeError:
-            print("Invalid JSON content")
             return None
     else:
         print("No JSON content found")
@@ -45,6 +45,7 @@ async def get_suggestions(message_history, retries=3, delay=2):
     for attempt in range(retries):
         try:
             output = await llm.achat(messages)
+            print(output)
             json_output = extract_json_from_string(output.message.content)
             return json_output
         except Exception as e:
