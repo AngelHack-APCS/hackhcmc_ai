@@ -8,6 +8,9 @@ from fastapi import FastAPI, File, UploadFile
 from chainlit.auth import create_jwt
 from chainlit.user import User
 from chainlit.utils import mount_chainlit
+from src.suggest_task import get_suggestions
+from chainlit.context import init_http_context
+import chainlit as cl
 
 app = FastAPI()
 
@@ -45,4 +48,17 @@ async def transcribe_audio(file: UploadFile = File(...)):
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
+@app.get("/suggest")
+async def get_suggestions_from_chainlit():
+    init_http_context()
+    message_history = cl.user_session.get("message_history")
+    if not message_history:
+        message_history = []
+    output = await get_suggestions(message_history)
+    return output
+    
+
+
 mount_chainlit(app=app, target="cl_app.py", path="/chainlit")
+
+
