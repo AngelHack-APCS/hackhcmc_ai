@@ -1,3 +1,4 @@
-openai
+fastapi==0.68.1
 llama-index
 llama-index-llms-groq==0.1.4
+chainlit==1.1.300

@@ -42,6 +42,7 @@ async def transcribe_audio(file: UploadFile = File(...)):
         # Get the transcript
         transcript = get_transcript(file_location)
         # Delete the temporary file
+        
         os.remove(file_location)
         
         return JSONResponse(content={"transcript": transcript}, status_code=200)
