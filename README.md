@@ -14,11 +14,11 @@ To get started with our project, follow these steps:
 
 1. Clone this repository to your local machine:
    ```bash
-   git clone https://github.com/your-repo-url.git
+   git clone https://github.com/AngelHack-APCS/hackhcmc_ai.git
    ```
 2. Navigate to the project directory:
    ```bash
-   cd your-repo-directory
+   cd hackhcmc_ai
    ```
 3. Install the required dependencies:
    ```bash
